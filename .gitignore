@@ -26,6 +26,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+static/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -127,3 +128,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Terraform
+.terraform
+terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Local Data
+sqlite.db
