@@ -22,6 +22,33 @@ def find_or_create_user(oauth):
         return False
     return user_hash
 
+def github_login(token):
+    auth_response = github_token_to_access_code(token)
+    if not auth_response:
+        return False
+    user_profile = github_get_user_profile(auth_response.get('access_token'))
+    if not user_profile:
+        return False
+    return user_profile
+
+def github_token_to_access_code(token):
+    payload = {
+        'client_id': os.environ.get('GITHUB_CLIENT_ID'),
+        'client_secret': os.environ.get('GITHUB_CLIENT_SECRET'),
+        'code': token
+    }
+    response = requests.post("https://github.com/login/oauth/access_token", data=payload, headers={'Accept': 'application/json'})
+    if response.status_code != 200:
+        return False
+    return response.json()
+
+def github_get_user_profile(oauth_token):
+    response = requests.get("https://api.github.com/user", headers={'Authorization': f"token {oauth_token}"})
+    if response.status_code != 200:
+        return False
+    return response.json()
+
+
 def google_verify_access_token(id_token):
     # We're doing it the lazy way here. What we get from the client side is JWT, we can just verify that instead of calling Google
     # Reason for that is to reduce the amount of dependencies for this, a demo app

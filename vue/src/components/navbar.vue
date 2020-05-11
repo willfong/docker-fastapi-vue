@@ -17,7 +17,7 @@
 
           <div class="navbar-end">
             <div class="navbar-item">
-              <router-link to="/login" class="navbar-item">Login</router-link>
+              <router-link to="/login/" class="navbar-item">Login</router-link>
             </div>
           </div>
       </div>

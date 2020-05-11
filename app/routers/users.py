@@ -31,6 +31,17 @@ def login_test(username: LoginToken):
         raise HTTPException(status_code=403, detail="Invalid Authentication Token")
     return {"token": util.create_token(user_id)}
 
+@router.post("/github")
+def login_github(token: LoginToken):
+    profile = users.github_login(token.value)
+    if not profile:
+        raise HTTPException(status_code=403, detail="Invalid Authentication Token")
+    user_id = users.find_or_create_user(f"github||{profile.get('id')}")
+    util.logger.warning(f"GitHub Account Logged In: {user_id} ({profile.get('id')})")
+    if not user_id:
+        raise HTTPException(status_code=403, detail="Invalid Authentication Token")
+    return {"token": util.create_token(user_id)}
+
 @router.get("/lookup")
 def lookup(id: str):
     return users.lookup(id)
