@@ -18,12 +18,12 @@ Getting the demo application up and running:
 1. Start a container named `app` from the image created above: 
 
    ```
-docker run \
-    --rm -d \
-    --name app \
-    -p 5000:80 \
-    -v ${PWD}/data:/data \
-    dockerfastapivue```
+   docker run \
+     --rm -d \
+     --name app \
+     -p 5000:80 \
+     -v ${PWD}/data:/data \
+     dockerfastapivue```
 1. Check to make sure the `app` container is still running: `docker ps`
 1. Create the SQLite datafile: `docker exec -it app sqlite3 /data/sqlite.db ".read /data/schema.sql"`
 1. Check the SQLite datafile to ensure there are tables: `docker exec -it app sqlite3 /data/sqlite.db .schema`
@@ -38,21 +38,21 @@ Make changes to the backend system:
 1. In `app/main.py` on line 16, add: 
 
    ```
-@app.get("/echo/:message")
-def echo(message: str):
-    util.logger.warning(f"Message: {message}")
-    return {"msg": message}```
+   @app.get("/echo/:message")
+   def echo(message: str):
+     util.logger.warning(f"Message: {message}")
+     return {"msg": message}```
 1. Stop the Docker container: `docker stop app`
 1. Rebuild Docker image: `docker build --tag dockerfastapivue .`
 1. Start a new container with the new image: 
 
    ```
-docker run \
-    --rm -d \
-    --name app \
-    -p 5000:80 \
-    -v ${PWD}/data:/data \
-    dockerfastapivue```
+   docker run \
+     --rm -d \
+     --name app \
+     -p 5000:80 \
+     -v ${PWD}/data:/data \
+     dockerfastapivue```
 1. Test the new endpoint: `curl localhost:5000/echo/hello-world`
 1. Check the Docker logs for your test message: `docker logs app`
 
@@ -66,13 +66,13 @@ Make changes to the frontend system:
 1. Start a new container with the new image: 
 
    ```
-docker run \
-  --rm -d \
-  --name app \
-  -p 5000:80 \
-  -v ${PWD}:/vue \
-  -v ${PWD}/data:/data \
-  dockerfastapivue```
+   docker run \
+     --rm -d \
+     --name app \
+     -p 5000:80 \
+     -v ${PWD}:/vue \
+     -v ${PWD}/data:/data \
+     dockerfastapivue```
 1. Open a web browser to: http://localhost:5000 and verify 
 
 
