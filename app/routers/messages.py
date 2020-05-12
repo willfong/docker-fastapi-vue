@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel
-from ..services import util, messages
+from ..services import util, users, messages
 
 router = APIRouter()
 
@@ -13,8 +13,8 @@ class Message(BaseModel):
 
 @router.post("/add")
 def add(message: Message, authorization: str = Header(None)):
-    user_id = util.token_to_userid(authorization)
-    if not user_id:
+    user_detail = users.get_user_data_from_token(authorization)
+    if not user_detail:
         raise HTTPException(status_code=403, detail="Invalid Authentication Token")
-    response = messages.add(user_id, message.text)
+    response = messages.add(user_detail.get('id'), message.text)
     return {"msg": response}

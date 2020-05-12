@@ -14,6 +14,10 @@ This guide assumes basic understanding of Docker, Python, and Javascript.
 1. Create a new repo using this as a template: https://github.com/willfong/docker-fastapi-vue/generate
 1. Clone the new repo locally: `git clone git@github.com:willfong/test-repo.git`
 1. Change to the new repo: `cd test-repo`
+1. Create a `.env` file and add session secret:
+
+   ```
+   JWT_SIGNING_TOKEN=SOME_SECRET_HERE
 1. Build the Docker image: `docker build --tag dockerfastapivue .`
 1. Start a container named `app` from the image created above: 
 
@@ -23,6 +27,7 @@ This guide assumes basic understanding of Docker, Python, and Javascript.
      --name app \
      -p 5000:80 \
      -v ${PWD}/data:/data \
+     --env-file .env \
      dockerfastapivue
 1. Check to make sure the `app` container is still running: `docker ps`
 1. Create the SQLite datafile: `docker exec -it app sqlite3 /data/sqlite.db ".read /data/schema.sql"`
@@ -91,7 +96,7 @@ docker run \
     -p 5000:80 \
     -v ${PWD}/vue:/vue \
     -v ${PWD}/data:/data \
-    --env-file .env \
+    
     dockerfastapivue
 ```
 
@@ -106,7 +111,7 @@ GitHub OAuth is a bit easier to enable than Facebook and Google OAuth.
 
 1. Create a GitHub OAuth Application: https://github.com/settings/applications/new
 1. Application Name and Homepage URL are just for display. Set Authorization callback URL to `http://localhost:5000/oauth/github`
-1. Create a `.env` file in the project checkout directory with the following info:
+1. Add the following to the `.env` file:
 
    ```
    GITHUB_CLIENT_ID=626...1d2

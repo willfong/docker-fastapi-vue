@@ -2,6 +2,8 @@ import os
 import hashlib
 import requests
 import json
+import jwt
+from datetime import datetime, timedelta
 from ..services import util, sqlite
 
 def get_details(id):
@@ -13,6 +15,31 @@ def lookup(oauth):
     query = "SELECT * FROM users WHERE oauth = ?"
     params = (oauth,)
     return sqlite.read(query, params, one=True)
+
+def create_login_token(sub):
+    return jwt.encode({
+        'sub': sub,
+        'iat': datetime.utcnow(),
+        'exp': datetime.utcnow() + timedelta(minutes=60*24*30)
+    }, get_secret_token())
+
+def get_user_data_from_token(token):
+    token_dict = verify_token(token)
+    if not token_dict:
+        util.logger.error(f'Could not verify token: {token}')
+        return False
+    return lookup(token_dict.get('sub'))
+
+def get_secret_token():
+    return os.environ.get('JWT_SIGNING_TOKEN')
+
+def verify_token(token):  
+    try: 
+        response = jwt.decode(token, get_secret_token())
+    except:
+        util.logger.error(f'Bad token: {token}')
+        return False
+    return response
 
 def find_or_create_user(oauth):
     user_hash = hashlib.sha224(oauth.encode('ascii')).hexdigest()
@@ -58,7 +85,7 @@ def google_verify_access_token(id_token):
     if response.get('error'):
         errmsg = response.get('error_description')
         util.logger.error(f"[USER|google_verify_access_token] {errmsg}")
-        return false
+        return False
     # Here, you should check that your domain name is in hd
     # if jwt['hd'] == 'example.com':
     #   return jwt
