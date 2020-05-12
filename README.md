@@ -102,4 +102,26 @@ docker exec -it app sqlite3 /data/sqlite.db
 
 ## GitHub Auth Flow
 
-https://developer.github.com/v3/users/#get-the-authenticated-user
+GitHub OAuth is a bit easier to enable than Facebook and Google OAuth. 
+
+1. Create a GitHub OAuth Application: https://github.com/settings/applications/new
+1. Application Name and Homepage URL are just for display. Set Authorization callback URL to `http://localhost:5000/oauth/github`
+1. Create a `.env` file in the project checkout directory with the following info:
+
+   ```
+   GITHUB_CLIENT_ID=626...1d2
+   GITHUB_CLIENT_SECRET=cc3...350
+1. Pass the `.env` file to Docker when you create the instance:
+
+   ```
+   docker run \
+     --rm -d \
+     --name app \
+     -p 5000:80 \
+     -v ${PWD}/vue:/vue \
+     -v ${PWD}/data:/data \
+     --env-file .env \
+     dockerfastapivue
+1. You can use the GitHub login button now. 
+
+Details about the user profile passed back from GitHub: https://developer.github.com/v3/users/#get-the-authenticated-user
