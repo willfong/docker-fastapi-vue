@@ -61,6 +61,7 @@ Make changes to the frontend system:
 1. Build the production distribution: `npm run build`
 1. Stop the existing Docker container: `docker stop app`
 1. Start a new container with the new image: 
+
    ```
 docker run \
   --rm -d \
