@@ -54,13 +54,14 @@ Make changes to the frontend system:
 1. In `src/components/navbar.vue`, change: ```<h1 class="title">Example App</h1>``` to ```<h1 class="title">Hello App!</h1>``` 
 1. Build the production distribution: `npm run build`
 1. Stop the existing Docker container: `docker stop app`
-1. Start a new container with the new image: ```docker run \
-    --rm -d \
-    --name app \
-    -p 5000:80 \
-    -v ${PWD}:/vue \
-    -v ${PWD}/data:/data \
-    dockerfastapivue```
+1. Start a new container with the new image: ```
+docker run \
+  --rm -d \
+  --name app \
+  -p 5000:80 \
+  -v ${PWD}:/vue \
+  -v ${PWD}/data:/data \
+  dockerfastapivue```
 1. Open a web browser to: http://localhost:5000 and verify 
 
 
