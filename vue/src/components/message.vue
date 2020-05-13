@@ -8,7 +8,7 @@
       <footer class="card-footer">
         <p class="card-footer-item">
           <span>
-            {{fmtDate}}
+            {{moment(fmtDate).fromNow()}}
           </span>
         </p>
         <p class="card-footer-item">
