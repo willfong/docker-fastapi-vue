@@ -15,7 +15,7 @@ idna==2.9
 jmespath==0.9.5
 jwt==1.0.0
 pycparser==2.20
-pydantic==1.5.1
+pydantic==1.6.2
 PyJWT==1.7.1
 python-dateutil==2.8.1
 python-dotenv==0.13.0
